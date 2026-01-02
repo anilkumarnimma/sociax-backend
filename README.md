@@ -1,9 +1,13 @@
 # Sociax Backend
 
-This is the backend for **Sociax**, a simple REST API built using Java and Spring Boot.  
-Sociax is intended to be part of a larger platform for international students in the US, starting with a job application tracker.
+Sociax is a backend REST API built using **Java and Spring Boot**.  
+This project is part of a larger idea focused on building useful tools and community features for international students in the United States.
 
-This backend project demonstrates how to design and implement REST APIs, properly separate controller and service logic, and handle basic operations like create, read, and update.
+The backend currently supports:
+- Job application tracking
+- Community posts (housing, jobs, general posts)
+
+This project demonstrates clean backend design, REST API development, and proper separation of controller and service layers.
 
 ---
 
@@ -14,70 +18,94 @@ This backend project demonstrates how to design and implement REST APIs, properl
 - Maven
 - REST APIs
 - In-memory storage (no database yet)
+- Postman (for API testing)
 
 ---
 
-## How to Run
+## How to Run the Project
 
 1. Clone the repository
 2. Open the project in IntelliJ IDEA
 3. Run the main class: `SociaxApplication.java`
-4. The server will start on: `http://localhost:8080`
+4. Server starts at:  
+http://localhost:8080
+
+yaml
+Copy code
 
 ---
-# create job application 
-POST
+
+## Job Application APIs
+
+### Create Job Application
+
+**POST**
 http://localhost:8080/api/jobs
 
-Body (JSON):
+cpp
+Copy code
 
+**Request Body (JSON):**
+```json
 {
   "company": "Amazon",
   "role": "Backend Engineer",
   "status": "APPLIED"
 }
 
+ Response:
 
-Expected output:
-
+json
+Copy code
 {
   "id": 1,
   "company": "Amazon",
   "role": "Backend Engineer",
   "status": "APPLIED"
 }
-**Update Job Status**
-
+Update Job Status
 PATCH
+
+bash
+Copy code
 http://localhost:8080/api/jobs/1/status
+Request Body (JSON):
 
-Body (JSON):
-
+json
+Copy code
 {
   "status": "INTERVIEW"
 }
+Response:
 
-
-Expected output:
-
-
+json
+Copy code
 {
   "id": 1,
   "company": "Amazon",
   "role": "Backend Engineer",
   "status": "INTERVIEW"
 }
-
-<img width="1920" height="1080" alt="{6FAC4F41-BA55-4DB9-B93E-D4D7EE9D3EBD}" src="https://github.com/user-attachments/assets/4ecd3ad2-478a-4dcd-9bc7-29ece4f9bb3e" />
-
-
-
-
-
-
-
-If ID not found:
-
+Job Not Found Response
+json
+Copy code
 {
   "error": "Job not found"
+}
+Community Posts APIs
+Create a Post
+POST
+
+bash
+Copy code
+http://localhost:8080/api/posts
+Request Body (JSON):
+
+json
+Copy code
+{
+  "title": "Roommate needed near Journal Square",
+  "content": "Budget $600–1100. Move-in Feb.",
+  "category": "HOUSING",
+  "city": "Jersey City"
 }
