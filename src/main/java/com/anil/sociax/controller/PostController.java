@@ -18,7 +18,7 @@ public class PostController {
 
     // Create a post
     @PostMapping
-    public Post create(@RequestBody Post post) {
+    public Post create(@RequestBody Post post) {  //sociax posts API
         return service.addPost(post);
     }
 
