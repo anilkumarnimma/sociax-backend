@@ -60,12 +60,20 @@ Body (JSON):
 
 Expected output:
 
+
 {
   "id": 1,
   "company": "Amazon",
   "role": "Backend Engineer",
   "status": "INTERVIEW"
 }
+
+<img width="1920" height="1080" alt="{6FAC4F41-BA55-4DB9-B93E-D4D7EE9D3EBD}" src="https://github.com/user-attachments/assets/4ecd3ad2-478a-4dcd-9bc7-29ece4f9bb3e" />
+
+
+
+
+
 
 
 If ID not found:
