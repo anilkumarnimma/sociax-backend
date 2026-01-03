@@ -1,35 +1,68 @@
 # Sociax Backend
 
-This is the backend for **Sociax**, a simple REST API built using Java and Spring Boot.  
-Sociax is intended to be part of a larger platform for international students in the US, starting with a job application tracker.
+This is the backend for Sociax, a REST API built using Java and Spring Boot.
 
-This backend project demonstrates how to design and implement REST APIs, properly separate controller and service logic, and handle basic operations like create, read, and update.
+Sociax is designed as a community-driven platform for international students in the US.
+# The backend currently supports:
 
----
+Job application tracking
 
-## Technologies Used
+Community posts (housing, jobs, help, etc.)
 
-- Java
-- Spring Boot
-- Maven
-- REST APIs
-- In-memory storage (no database yet)
+This project focuses on clean REST API design, proper separation of concerns, and real-world backend practices.
 
----
+# What This Backend Does
+1. Job Application Tracker
 
-## How to Run
+Create job applications
 
-1. Clone the repository
-2. Open the project in IntelliJ IDEA
-3. Run the main class: `SociaxApplication.java`
-4. The server will start on: `http://localhost:8080`
+View all job applications
 
----
-# create job application 
-POST
+Update job status (Applied → Interview → Offer, etc.)
+
+Handles basic error cases (job not found)
+
+2. Community Posts API
+
+Create posts (housing, jobs, general help)
+
+View all posts
+
+Filter posts by category
+
+Designed for student community use cases
+
+# Technologies Used
+
+Java
+
+Spring Boot
+
+Maven
+
+REST APIs
+
+In-memory storage (no database yet)
+
+# How to Run the Project
+
+Clone the repository
+
+Open the project in IntelliJ IDEA
+
+Run the main class:
+SociaxApplication.java
+
+Server starts at:
+http://localhost:8080
+
+# Job Application APIs
+Create Job Application
+
+**POST**
 http://localhost:8080/api/jobs
 
-Body (JSON):
+Request Body (JSON):
 
 {
   "company": "Amazon",
@@ -38,7 +71,7 @@ Body (JSON):
 }
 
 
-Expected output:
+Response:
 
 {
   "id": 1,
@@ -46,19 +79,20 @@ Expected output:
   "role": "Backend Engineer",
   "status": "APPLIED"
 }
-**Update Job Status**
 
-PATCH
+# Update Job Status
+
+**PATCH**
 http://localhost:8080/api/jobs/1/status
 
-Body (JSON):
+Request Body (JSON):
 
 {
   "status": "INTERVIEW"
 }
 
 
-Expected output:
+Response:
 
 {
   "id": 1,
@@ -67,9 +101,24 @@ Expected output:
   "status": "INTERVIEW"
 }
 
-
-If ID not found:
-
+If Job ID Is Not Found
 {
   "error": "Job not found"
 }
+
+Community Posts APIs
+Create a Post
+
+**POST**
+http://localhost:8080/api/posts
+
+Request Body (JSON):
+
+{
+  "title": "Roommate needed near Journal Square",
+  "content": "Budget $600–1100. Move-in Feb.",
+  "category": "HOUSING",
+  "city": "Jersey City"
+}
+<img width="1920" height="1080" alt="{6FAC4F41-BA55-4DB9-B93E-D4D7EE9D3EBD}" src="https://github.com/user-attachments/assets/4742b9a4-fa51-4fcf-bb62-092f14c3668b" />
+
