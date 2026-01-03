@@ -5,6 +5,7 @@ import com.anil.sociax.service.PostService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -16,18 +17,40 @@ public class PostController {
         this.service = service;
     }
 
-    // Create a post
+    // Create post
     @PostMapping
-    public Post create(@RequestBody Post post) {  //sociax posts API
-        return service.addPost(post);
+    public Post createPost(@RequestBody Post post) {
+        return service.createPost(post);
     }
 
-    // Get all posts (optional filter by category)
+    // Get all posts (or by category)
     @GetMapping
-    public List<Post> getAll(@RequestParam(required = false) String category) {
-        if (category == null || category.isBlank()) {
-            return service.getAll();
+    public List<Post> getAllPosts(
+            @RequestParam(required = false) String category) {
+
+        if (category != null) {
+            return service.getByCategory(category);
         }
-        return service.getByCategory(category);
+        return service.getAllPosts();
+    }
+
+    // Get single post by ID
+    @GetMapping("/{id}")
+    public Object getPostById(@PathVariable int id) {
+        Post post = service.getById(id);
+        if (post == null) {
+            return Map.of("error", "Post not found");
+        }
+        return post;
+    }
+
+    // Delete post by ID
+    @DeleteMapping("/{id}")
+    public Map<String, String> deletePost(@PathVariable int id) {
+        boolean removed = service.deleteById(id);
+        if (!removed) {
+            return Map.of("error", "Post not found");
+        }
+        return Map.of("message", "Post deleted");
     }
 }

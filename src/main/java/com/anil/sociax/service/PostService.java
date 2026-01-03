@@ -12,26 +12,53 @@ public class PostService {
     private final List<Post> posts = new ArrayList<>();
     private int counter = 1;
 
-    public Post addPost(Post post) {
+    // Create a new post
+    public Post createPost(Post post) {
         post.setId(counter++);
-        if (post.getCategory() == null || post.getCategory().isBlank()) {
-            post.setCategory("HELP");
-        }
         posts.add(post);
         return post;
     }
 
-    public List<Post> getAll() {
+    // Get all posts
+    public List<Post> getAllPosts() {
         return posts;
     }
 
+    // Get posts by category
     public List<Post> getByCategory(String category) {
         List<Post> result = new ArrayList<>();
         for (Post p : posts) {
-            if (p.getCategory() != null && p.getCategory().equalsIgnoreCase(category)) {
+            if (p.getCategory() != null &&
+                    p.getCategory().equalsIgnoreCase(category)) {
                 result.add(p);
             }
         }
         return result;
+    }
+
+    // Get a post by ID
+    public Post getById(int id) {
+        for (Post p : posts) {
+            if (p.getId() == id) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    // Delete a post by ID
+    public boolean deleteById(int id) {
+        Post found = null;
+        for (Post p : posts) {
+            if (p.getId() == id) {
+                found = p;
+                break;
+            }
+        }
+        if (found == null) {
+            return false;
+        }
+        posts.remove(found);
+        return true;
     }
 }
