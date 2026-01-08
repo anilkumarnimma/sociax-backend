@@ -46,6 +46,28 @@ public class PostService {
         return null;
     }
 
+    // Update a post by ID
+    public Post updatePost(int id, Post incoming) {
+        Post existing = getById(id);
+        if (existing == null) return null;
+
+        // Only update fields that are provided (non-null and not blank)
+        if (incoming.getTitle() != null && !incoming.getTitle().isBlank()) {
+            existing.setTitle(incoming.getTitle());
+        }
+        if (incoming.getContent() != null && !incoming.getContent().isBlank()) {
+            existing.setContent(incoming.getContent());
+        }
+        if (incoming.getCategory() != null && !incoming.getCategory().isBlank()) {
+            existing.setCategory(incoming.getCategory());
+        }
+        if (incoming.getCity() != null && !incoming.getCity().isBlank()) {
+            existing.setCity(incoming.getCity());
+        }
+
+        return existing;
+    }
+
     // Delete a post by ID
     public boolean deleteById(int id) {
         Post found = null;
@@ -55,9 +77,8 @@ public class PostService {
                 break;
             }
         }
-        if (found == null) {
-            return false;
-        }
+        if (found == null) return false;
+
         posts.remove(found);
         return true;
     }

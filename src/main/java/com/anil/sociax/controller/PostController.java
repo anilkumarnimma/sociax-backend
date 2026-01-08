@@ -25,10 +25,8 @@ public class PostController {
 
     // Get all posts (or by category)
     @GetMapping
-    public List<Post> getAllPosts(
-            @RequestParam(required = false) String category) {
-
-        if (category != null) {
+    public List<Post> getAllPosts(@RequestParam(required = false) String category) {
+        if (category != null && !category.isBlank()) {
             return service.getByCategory(category);
         }
         return service.getAllPosts();
@@ -42,6 +40,16 @@ public class PostController {
             return Map.of("error", "Post not found");
         }
         return post;
+    }
+
+    // Update post by ID
+    @PutMapping("/{id}")
+    public Object updatePost(@PathVariable int id, @RequestBody Post incoming) {
+        Post updated = service.updatePost(id, incoming);
+        if (updated == null) {
+            return Map.of("error", "Post not found");
+        }
+        return updated;
     }
 
     // Delete post by ID
