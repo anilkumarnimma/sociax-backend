@@ -17,22 +17,16 @@ public class PostController {
         this.service = service;
     }
 
-    // Create post
-    @PostMapping
-    public Post createPost(@RequestBody Post post) {
-        return service.createPost(post);
-    }
-
-    // Get all posts (or by category)
+    // GET all (or filter by category)
     @GetMapping
-    public List<Post> getAllPosts(@RequestParam(required = false) String category) {
-        if (category != null && !category.isBlank()) {
-            return service.getByCategory(category);
+    public List<Post> getAll(@RequestParam(required = false) String category) {
+        if (category == null || category.isBlank()) {
+            return service.getAll();
         }
-        return service.getAllPosts();
+        return service.getByCategory(category);
     }
 
-    // Get single post by ID
+    // GET by id
     @GetMapping("/{id}")
     public Object getPostById(@PathVariable int id) {
         Post post = service.getById(id);
@@ -42,17 +36,23 @@ public class PostController {
         return post;
     }
 
-    // Update post by ID
+    // CREATE
+    @PostMapping
+    public Post createPost(@RequestBody Post post) {
+        return service.create(post);
+    }
+
+    // ✅ UPDATE (FULL UPDATE)
     @PutMapping("/{id}")
-    public Object updatePost(@PathVariable int id, @RequestBody Post incoming) {
-        Post updated = service.updatePost(id, incoming);
+    public Object updatePost(@PathVariable int id, @RequestBody Post post) {
+        Post updated = service.update(id, post);
         if (updated == null) {
             return Map.of("error", "Post not found");
         }
         return updated;
     }
 
-    // Delete post by ID
+    // DELETE
     @DeleteMapping("/{id}")
     public Map<String, String> deletePost(@PathVariable int id) {
         boolean removed = service.deleteById(id);

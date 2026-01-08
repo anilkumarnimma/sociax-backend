@@ -10,76 +10,67 @@ import java.util.List;
 public class PostService {
 
     private final List<Post> posts = new ArrayList<>();
-    private int counter = 1;
+    private int nextId = 1;
 
-    // Create a new post
-    public Post createPost(Post post) {
-        post.setId(counter++);
-        posts.add(post);
-        return post;
+    public PostService() {
+        // sample data
+        posts.add(new Post(nextId++, "Roommate needed near Journal Square",
+                "Budget $900-1200. Move-in Feb.",
+                "HOUSING", "Jersey City"));
+
+        posts.add(new Post(nextId++, "Study group for Spring Boot",
+                "Looking for 2-3 people to build projects together",
+                "COMMUNITY", "Jersey City"));
     }
 
-    // Get all posts
-    public List<Post> getAllPosts() {
+    public List<Post> getAll() {
         return posts;
     }
 
-    // Get posts by category
     public List<Post> getByCategory(String category) {
+        if (category == null || category.isBlank()) return posts;
+
         List<Post> result = new ArrayList<>();
         for (Post p : posts) {
-            if (p.getCategory() != null &&
-                    p.getCategory().equalsIgnoreCase(category)) {
+            if (p.getCategory() != null && p.getCategory().equalsIgnoreCase(category)) {
                 result.add(p);
             }
         }
         return result;
     }
 
-    // Get a post by ID
     public Post getById(int id) {
         for (Post p : posts) {
-            if (p.getId() == id) {
+            if (p.getId() != null && p.getId() == id) {
                 return p;
             }
         }
         return null;
     }
 
-    // Update a post by ID
-    public Post updatePost(int id, Post incoming) {
+    public Post create(Post post) {
+        post.setId(nextId++);
+        posts.add(post);
+        return post;
+    }
+
+    // ✅ UPDATE
+    public Post update(int id, Post updatedPost) {
         Post existing = getById(id);
         if (existing == null) return null;
 
-        // Only update fields that are provided (non-null and not blank)
-        if (incoming.getTitle() != null && !incoming.getTitle().isBlank()) {
-            existing.setTitle(incoming.getTitle());
-        }
-        if (incoming.getContent() != null && !incoming.getContent().isBlank()) {
-            existing.setContent(incoming.getContent());
-        }
-        if (incoming.getCategory() != null && !incoming.getCategory().isBlank()) {
-            existing.setCategory(incoming.getCategory());
-        }
-        if (incoming.getCity() != null && !incoming.getCity().isBlank()) {
-            existing.setCity(incoming.getCity());
-        }
+        existing.setTitle(updatedPost.getTitle());
+        existing.setContent(updatedPost.getContent());
+        existing.setCategory(updatedPost.getCategory());
+        existing.setCity(updatedPost.getCity());
 
         return existing;
     }
 
-    // Delete a post by ID
     public boolean deleteById(int id) {
-        Post found = null;
-        for (Post p : posts) {
-            if (p.getId() == id) {
-                found = p;
-                break;
-            }
-        }
-        if (found == null) return false;
-
-        posts.remove(found);
+        Post existing = getById(id);
+        if (existing == null) return false;
+        posts.remove(existing);
         return true;
     }
 }
