@@ -1,8 +1,11 @@
 # Sociax Backend
 
-This is the backend for Sociax, a REST API built using Java and Spring Boot.
+This is the backend for **Sociax**, a REST API built using Java and Spring Boot.
 
-Sociax is designed as a community-driven platform for international students in the US.
+Sociax is a platform for international students in the US, providing:
+- Job application tracking
+- Community posts (housing, jobs, help, etc.)
+
 # The backend currently supports:
 
 Job application tracking
