@@ -15,19 +15,24 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
+    // CREATE
     public Post createPost(Post post) {
+        post.setId(null); // ensure auto-generated id
         return postRepository.save(post);
     }
 
+    // GET ALL
     public List<Post> getAllPosts() {
         return postRepository.findAll();
     }
 
+    // ✅ GET BY ID (THIS fixes your controller error)
     public Post getPostById(Long id) {
         return postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Post not found with id: " + id));
     }
 
+    // DELETE
     public void deletePost(Long id) {
         postRepository.deleteById(id);
     }
