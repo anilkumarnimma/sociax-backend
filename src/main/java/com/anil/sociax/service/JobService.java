@@ -1,56 +1,51 @@
 package com.anil.sociax.service;
 
 import com.anil.sociax.model.Job;
+import com.anil.sociax.repository.JobRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class JobService {
 
-    private final List<Job> jobs = new ArrayList<>();
-    private int nextId = 1;
+    private final JobRepository jobRepository;
 
-    public JobService() {
-        // sample data
-        jobs.add(new Job(nextId++, "Amazon", "Backend Engineer", "NYC", "APPLIED"));
-        jobs.add(new Job(nextId++, "Wells Fargo", "Software Developer", "NJ", "INTERVIEW"));
+    public JobService(JobRepository jobRepository) {
+        this.jobRepository = jobRepository;
     }
 
-    public Job create(Job job) {
-        job.setId(nextId++);
+    // Create job
+    public Job createJob(Job job) {
         if (job.getStatus() == null || job.getStatus().isBlank()) {
             job.setStatus("APPLIED");
         }
-        jobs.add(job);
-        return job;
+        return jobRepository.save(job);
     }
 
-    public List<Job> getAll() {
-        return jobs;
+    // Get all jobs
+    public List<Job> getAllJobs() {
+        return jobRepository.findAll();
     }
 
-    public Job getById(int id) {
-        for (Job j : jobs) {
-            if (j.getId() != null && j.getId() == id) return j;
+    // Update job status
+    public Job updateJobStatus(Long id, String status) {
+        Optional<Job> optionalJob = jobRepository.findById(id);
+        if (optionalJob.isEmpty()) {
+            return null;
         }
-        return null;
+        Job job = optionalJob.get();
+        job.setStatus(status);
+        return jobRepository.save(job);
     }
 
-    public Job updateStatus(int id, String status) {
-        Job existing = getById(id);
-        if (existing == null) return null;
-
-        existing.setStatus(status);
-        return existing;
-    }
-
-    public boolean deleteById(int id) {
-        Job existing = getById(id);
-        if (existing == null) return false;
-
-        jobs.remove(existing);
+    // Delete job
+    public boolean deleteJob(Long id) {
+        if (!jobRepository.existsById(id)) {
+            return false;
+        }
+        jobRepository.deleteById(id);
         return true;
     }
 }

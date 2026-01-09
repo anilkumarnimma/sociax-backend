@@ -1,57 +1,50 @@
 package com.anil.sociax.controller;
 
 import com.anil.sociax.model.Job;
-import com.anil.sociax.service.JobService;
+import com.anil.sociax.repository.JobRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping("/api/jobs")
+@RequestMapping("/jobs")
+@CrossOrigin(origins = "*")
 public class JobController {
 
-    private final JobService service;
+    private final JobRepository jobRepository;
 
-    public JobController(JobService service) {
-        this.service = service;
+    public JobController(JobRepository jobRepository) {
+        this.jobRepository = jobRepository;
     }
 
-    // Create job
-    @PostMapping
-    public Job createJob(@RequestBody Job job) {
-        return service.create(job);
-    }
-
-    // Get all jobs
+    // GET http://localhost:8080/jobs
     @GetMapping
     public List<Job> getAllJobs() {
-        return service.getAll();
+        return jobRepository.findAll();
     }
 
-    // Get job by id
+    // POST http://localhost:8080/jobs
+    @PostMapping
+    public Job createJob(@RequestBody Job job) {
+        // ensure id is not forced from client
+
+        return jobRepository.save(job);
+    }
+
+    // GET http://localhost:8080/jobs/{id}
     @GetMapping("/{id}")
-    public Object getJobById(@PathVariable int id) {
-        Job job = service.getById(id);
-        if (job == null) return Map.of("error", "Job not found");
-        return job;
+    public ResponseEntity<Job> getJobById(@PathVariable Long id) {
+        return jobRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // Update job status
-    @PatchMapping("/{id}/status")
-    public Object updateStatus(@PathVariable int id, @RequestBody Map<String, String> body) {
-        String status = body.get("status");
-        Job updated = service.updateStatus(id, status);
-
-        if (updated == null) return Map.of("error", "Job not found");
-        return updated;
-    }
-
-    // Delete job
+    // DELETE http://localhost:8080/jobs/{id}
     @DeleteMapping("/{id}")
-    public Map<String, String> deleteJob(@PathVariable int id) {
-        boolean removed = service.deleteById(id);
-        if (!removed) return Map.of("error", "Job not found");
-        return Map.of("message", "Job deleted");
+    public ResponseEntity<Void> deleteJob(@PathVariable Long id) {
+        if (!jobRepository.existsById(id)) return ResponseEntity.notFound().build();
+        jobRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
