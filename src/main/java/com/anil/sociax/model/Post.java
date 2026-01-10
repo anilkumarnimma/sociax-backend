@@ -1,6 +1,9 @@
 package com.anil.sociax.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -18,6 +21,10 @@ public class Post {
     private String category;
     private String city;
 
+    @JsonManagedReference
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
     public Post() {}
 
     public Post(String title, String content, String category, String city) {
@@ -27,6 +34,7 @@ public class Post {
         this.city = city;
     }
 
+    // getters/setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -41,4 +49,7 @@ public class Post {
 
     public String getCity() { return city; }
     public void setCity(String city) { this.city = city; }
+
+    public List<Comment> getComments() { return comments; }
+    public void setComments(List<Comment> comments) { this.comments = comments; }
 }
